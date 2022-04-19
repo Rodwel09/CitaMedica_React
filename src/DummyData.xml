@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<all_info>
+    <doctor_info>
+        <doctor_name>Juan Lopez</doctor_name>
+        <notification_amount>3</notification_amount>
+    </doctor_info>
+    <note>
+        <client_name>Rodniel Polanco Martinez</client_name>
+        <priority_status>Consulta</priority_status>
+        <diagnostico>Fiebre, tos, ligera dificultad de respirar</diagnostico>
+    </note>
+    <client>
+        <name>Cecilia Martinez</name>
+        <tipo_atender>Consulta Medica</tipo_atender>
+        <diagnostico>Fiebre y tos</diagnostico>
+    </client>
+</all_info>
