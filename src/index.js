@@ -1,12 +1,25 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './js/App';
+import HomePage from './js/Pages/HomePage';
 import reportWebVitals from './js/reportWebVitals';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import DoctorPage from './js/Pages/DoctorPage';
+import PatientRegistration from './js/Pages/PatientRegister';
+
+export default function Rendering(){
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<HomePage />}></Route>
+        <Route path="/registro_paciente" element={<PatientRegistration />}></Route>
+        <Route path='/pagina_doctor' element={<DoctorPage />}></Route>
+      </Routes>
+    </BrowserRouter>
+  );
+}
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <Rendering />,
   document.getElementById('page')
 );
 
