@@ -2,10 +2,10 @@ import axios from "axios";
 import moment from "moment";
 import {React} from "react";
 import { useEffect, useState } from "react";
-import { getAllByTestId } from "@testing-library/react";
 import { Button, Card, Form, Modal, ModalBody, ModalHeader, ModalTitle } from "react-bootstrap";
 
-const API_PATH = "http://localhost/consulta_medica_php/GetPacientsData.php";
+const GET_PACIENT_API_PATH = "http://localhost/consulta_medica_php/GetPacientsData.php";
+const SET_PACIENT_STATUS_PATH = "http://localhost/consulta_medica_php/ChangeStatus.php";
 
 var option = 0;
 
@@ -17,7 +17,7 @@ function SetNotificationData(){
     const [post, setPost] = useState(false);
 
     useEffect(() => {
-        axios.get(API_PATH).then(resp => {
+        axios.get(GET_PACIENT_API_PATH).then(resp => {
             setPost(resp.data);
         });
     }, []);
@@ -42,7 +42,6 @@ function SetNotificationData(){
     }
     return allData;
 }
-
 
 function RenderHeaderPage(){
     var notificationData = [];
@@ -93,13 +92,43 @@ function RenderHeaderPage(){
     </div>;
 }
 
+function FinishAppointment(id, current_status){
+    // const [post, setPost] = useState(false);
+    var status_updated;
+
+    if (current_status == 1) {
+        status_updated = 2;
+    }
+    else {
+        status_updated = 1;
+    }
+    
+    const data = {
+        id_paciente: id,
+        status_paciente_updated: status_updated
+    };
+
+    var allData = new FormData();
+    allData.append('id_paciente', id);
+    allData.append('status_paciente_updated', status_updated);
+
+    axios({
+        method: "post",
+        url: SET_PACIENT_STATUS_PATH,
+        data: allData,
+        headers: { "Content-Type": "application/json" }
+    }).then(resp => {
+        console.log(resp);
+    })
+}
+
 function SetPacientData(){
     let allData = [];
 
     const [post, setPost] = useState(false);
 
     useEffect(() => {
-        axios.get(API_PATH).then(resp => {
+        axios.get(GET_PACIENT_API_PATH).then(resp => {
             setPost(resp.data);
         });
     }, []);
@@ -113,6 +142,10 @@ function SetPacientData(){
                     <Card.Title>Nombre de cliente: {post[index].nombre_paciente}</Card.Title>
                     <Card.Text>Diagnostico: {post[index].padecimiento_paciente}</Card.Text>
                 </Card.Body>
+                <Card.Footer>
+                    <Button variant="primary" onClick={() => FinishAppointment(post[index].id_paciente, post[index].StatusPaciente)}>Termino Consulta</Button>{' '}
+                    <Button variant="secondary">Mover Consulta</Button>{' '}
+                </Card.Footer>
             </Card></td>);
         }
     }
