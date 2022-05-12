@@ -1,100 +1,148 @@
-import {React, Fragment} from 'react';
+import axios from 'axios';
+import {React, Fragment, useState} from 'react';
+import { Form, FormGroup, Button } from 'react-bootstrap';
+
+const pacientRegistrationUrl = "http://localhost:5000/new_pacients";
+
+// class APIService{ 
+//     static InsertData(body){
+//         // return fetch(pacientRegistrationUrl, {
+//         //     'method': 'POST',
+//         //     headers: { 'Content-Type': 'application/json' },
+//         //     mode: 'no-cors',
+//         //     body: JSON.stringify(body)
+//         // })
+//         // .then(resp => resp.json())
+//         // .catch(err => console.log(err))
+
+//         // const options = {
+//         //     method: "POST",
+//         //     mode: 'no-cors',
+//         //     headers: {
+//         //         'Accept': 'application/json, text/plain, */*',
+//         //         'Content-Type': 'application/json'
+//         //     },
+//         //     body: JSON.stringify(body)
+//         // }
+
+//         // fetch(pacientRegistrationUrl, options)
+//         //     .then(resp => {
+//         //         console.log(resp)
+//         //         if (resp.ok) {
+//         //             return resp.json();
+//         //         }
+//         //         else {
+//         //             throw new Error("Something went wrong...");
+//         //         }
+//         //     })
+
+
+//     }
+// }
 
 export default function PatientRegistration(){
-    return <form>
-            <div className='form-group'>
-                <h1 className=''>Ingrese sus datos para ser atendido: </h1>
-            </div>
-            <div className="form-group">
-                <label htmlFor="">Ingrese su nombre:</label>
-                <input type="text" className="form-control" placeholder='Entre su nombre'></input>
-            </div>
-            <div className='form-group'>
-                <label htmlFor="">Ingrese su apellido:</label>
-                <input type="text" className="form-control" placeholder='Entre su apellido'></input>
-            </div>
-            <div className='form-group'>
-                <label htmlFor="">Ingrese su edad:</label>
-                <input type="text" className="form-control" placeholder='Entre su edad'></input>
-            </div>
-            <div className='form-group'>
-                <label htmlFor="">Ingrese su fecha de nacimiento:</label>
-                <input type="text" className="form-control" placeholder='Entre su fecha de nacimiento'></input>
-            </div>
-            <div className='form-group'>
-                <label htmlFor="">Tipo de Sangre:</label>
-                <select name="tipo_sangre" id="" className='form-control'>
-                    <option value="A Pos">A+</option>
-                    <option value="A Neg">A-</option>
-                    <option value="B Pos">B+</option>
-                    <option value="B Neg">B-</option>
-                    <option value="AB Pos">AB+</option>
-                    <option value="AB Pos">AB+</option>
-                    <option value="O Pos">O+</option>
-                    <option value="O Neg">O-</option>
-                </select>
-            </div>
-            <div className='form-group'>
-                <label htmlFor="" className='form-label'>Sexo:</label>
-                <div className="form-check">
-                    <input type="radio" name='sexo' className='form-check-input' value="Masculino" />
-                    <label htmlFor="" className='form-check-label'>Masculino</label>
-                </div>
-                <div className='form-check'>
-                    <input type="radio" name='sexo' className='form-check-input' value="Femenino" />
-                    <label htmlFor="" className='form-check-label'>Femenino</label>
-                </div>
-            </div>
-            <div className='form-group'>
-                <label htmlFor="" className='form-label fs-3'>Ingrese sus datos medicos</label>
-            </div>
-            <div className='form-group'>
-                <label htmlFor="" className='form-label'>Estado Civil</label>
-                <select name="estado_civil" id="" className='form-control'>
-                    <option value="Soltero">Soltero</option>
-                    <option value="Casado">Casado</option>
-                    <option value="Viudo">Viudo</option>
-                </select>
-            </div>
-            <div className='form-group'>
-                <label htmlFor="" className='form-label'>Sufre de algunas alergias? </label>
-                <div className='form-check'>
-                    <input type="radio" className='form-check-input' name='alergias' value='Si'/>
-                    <label htmlFor="" className='form-check-label'>Si</label>
-                </div>
-                <div className='form-check'>
-                    <input type="radio" name='alergias' className='form-check-input' value='No' />
-                    <label htmlFor="" className='form-check-label'>No</label>
-                </div>
-            </div>
-            <div className='form-group'>
-                <label htmlFor="" className='form-label'>Padece de una enfermedad hereditaria?</label>
-                <div className='form-check'>
-                    <input type="radio" name='enfermedad-hereditaria' className='form-check-input' value='Si' />
-                    <label htmlFor="" className='form-check-label'>Si</label>
-                </div>
-                <div className='form-check'>
-                    <input type="radio" name='enfermedad-hereditaria' className='form-check-input' value='No'/>
-                    <label htmlFor="" className='form-check-label'>No</label>
-                </div>
-            </div>
-            <div className='form-group'>
-                <label htmlFor="" className='form-label'>Fechas en la que desea ser atendido: </label>
-                <input type="date" className='form-control' name='fecha_visita'/>
-            </div>
-            <div className='form-group'>
-                <label htmlFor="" className='form-label'>Horario disponible por el doctor: </label>
-                <select name="" id="" className="form-control">
-                    <option value="">Seleccione una fecha</option>
-                </select>
-            </div>
-            <div className="form-group">
-                <label htmlFor="" className='form-label'>Describa con detalle lo que padece: </label>
-                <textarea name="padecimiento" id="" cols="30" rows="10" className='form-control'></textarea>
-            </div>
-            <div className="form-group">
-                <button className='btn btn-close' type='close'>Cancelar</button>
-                <button className='btn btn-primary' type='submit'>Enviar Registro</button>
-            </div>
-        </form>;
+    const [nombre, setName] = useState('');
+    const [apellido, setApellido] = useState('');
+    const [edad, setEdad] = useState('');
+    const [fecha, setFecha] = useState('');
+    const [sangre, setSangre] = useState('');
+    const [sexo, setSexo] = useState('');
+    const [est_civil, setEstadoCivil] = useState('');
+    const [alergias, setAlergiasPaciente] = useState('');
+    const [fecha_atencion, setFechaAtencion] = useState('');
+    const [padecimiento_paciente, setPadecimiento] = useState('');
+
+    // const insertPacients = () => {
+    //     APIService.InsertData({nombre, apellido, edad, fecha, sangre, sexo, est_civil, alergias, fecha_atencion, padecimiento_paciente})
+    //     // .then((resp) => insertPacients(resp))
+    //     // .catch(err => console.log('error', err))
+    // }
+
+    var allData = {
+        nombre_paciente: nombre,
+        apellido_paciente: apellido,
+        edad_paciente: edad,
+        fecha_nacimiento: fecha,
+        tipo_sangre: sangre,
+        sexo_paciente: sexo,
+        estado_civil: est_civil,
+        alergias_paciente: alergias,
+        fecha_atencion_paciente: fecha_atencion,
+        padecimiento_paciente: padecimiento_paciente
+    }
+
+    const insertPacients = () => {
+
+        return fetch(pacientRegistrationUrl, {
+            method: "POST",
+            mode: "no-cors",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(allData)
+        })
+    }
+
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        insertPacients()
+        setName('')
+        setApellido('')
+        setEdad('')
+        setFecha('')
+        setSangre('')
+        setSexo('')
+        setEstadoCivil('')
+        setAlergiasPaciente('')
+        setFechaAtencion('')
+        setPadecimiento('')
+    }
+
+    return <div className='container-fluid'>
+        <div className='header'><h1>Registro de Paciente</h1></div>
+        <Form onSubmit={handleSubmit}>
+            <FormGroup className='mb-3'>
+                <Form.Label>Nombre de Paciente</Form.Label>
+                <Form.Control type='text' placeholder='Introduzca su nombre' name='nombre_paciente' value={nombre} onChange={(e) => setName(e.target.value)}/>
+            </FormGroup>
+            <FormGroup className='mb-3'>
+                <Form.Label>Apellido de Paciente</Form.Label>
+                <Form.Control type='text' placeholder='Introduzca su apellido' name='apellido_paciente' value={apellido} onChange={(e) => setApellido(e.target.value)}/>
+            </FormGroup>
+            <FormGroup className='mb-3'>
+                <Form.Label>Edad del paciente</Form.Label>
+                <Form.Control type='text' placeholder='Introduzca su edad' name='edad_paciente' value={edad} onChange={(e) => setEdad(e.target.value)}/>
+            </FormGroup>
+            <FormGroup className='mb-3'>
+                <Form.Label>Fecha de Nacimiento</Form.Label>
+                <Form.Control type='date' placeholder='Introduzca su fecha de nacimiento' name='fecha_nacimiento' value={fecha} onChange={(e) => setFecha(e.target.value)}/>
+            </FormGroup>
+            <FormGroup className='mb-3'>
+                <Form.Label>Tipo de Sangre</Form.Label>
+                <Form.Control type='text' placeholder='Introduzca su tipo de sangre' name='tipo_sangre' value={sangre} onChange={(e) => setSangre(e.target.value)}/>
+            </FormGroup>
+            <FormGroup className='mb-3'>
+                <Form.Label>Sexo del paciente</Form.Label>
+                <Form.Control type='text' placeholder='Introduzca su sexo de paciente' name='sexo_paciente' value={sexo} onChange={(e) => setSexo(e.target.value)}/>
+            </FormGroup>
+            <FormGroup className='mb-3'>
+                <Form.Label>Estado Civil Paciente</Form.Label>
+                <Form.Control type='text' placeholder='Introduzca su estado civil' name='estado_civil_paciente' value={est_civil} onChange={(e) => setEstadoCivil(e.target.value)}/>
+            </FormGroup>
+            <FormGroup className='mb-3'>
+                <Form.Label>Alergias del paciente</Form.Label>
+                <Form.Control as="textarea" rows={3} placeholder="Tiene alergias? Diga cuales?" name='alergias_paciente' value={alergias} onChange={(e) => setAlergiasPaciente(e.target.value)}/>
+            </FormGroup>
+            <FormGroup className='mb-3'>
+                <Form.Label>Fecha de atencion del paciente</Form.Label>
+                <Form.Control type='date' placeholder='Introduzca su fecha de atencion' name='fecha_atencion_paciente' value={fecha_atencion} onChange={(e) => setFechaAtencion(e.target.value)} />
+            </FormGroup>
+            <FormGroup className='mb-3'>
+                <Form.Label>Padecimiento Paciente</Form.Label>
+                <Form.Control as="textarea" rows={3} placeholder="Diga sus sintomas, que siente?" name='padecimiento_paciente' value={padecimiento_paciente} onChange={(e) => setPadecimiento(e.target.value)}/>
+            </FormGroup>
+            <Button variant="primary" type="submit">Guardar informacion</Button>
+        </Form>
+    </div>
 }
