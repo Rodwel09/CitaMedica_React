@@ -4,42 +4,6 @@ import { Form, FormGroup, Button } from 'react-bootstrap';
 
 const pacientRegistrationUrl = "http://localhost:5000/new_pacients";
 
-// class APIService{ 
-//     static InsertData(body){
-//         // return fetch(pacientRegistrationUrl, {
-//         //     'method': 'POST',
-//         //     headers: { 'Content-Type': 'application/json' },
-//         //     mode: 'no-cors',
-//         //     body: JSON.stringify(body)
-//         // })
-//         // .then(resp => resp.json())
-//         // .catch(err => console.log(err))
-
-//         // const options = {
-//         //     method: "POST",
-//         //     mode: 'no-cors',
-//         //     headers: {
-//         //         'Accept': 'application/json, text/plain, */*',
-//         //         'Content-Type': 'application/json'
-//         //     },
-//         //     body: JSON.stringify(body)
-//         // }
-
-//         // fetch(pacientRegistrationUrl, options)
-//         //     .then(resp => {
-//         //         console.log(resp)
-//         //         if (resp.ok) {
-//         //             return resp.json();
-//         //         }
-//         //         else {
-//         //             throw new Error("Something went wrong...");
-//         //         }
-//         //     })
-
-
-//     }
-// }
-
 export default function PatientRegistration(){
     const [nombre, setName] = useState('');
     const [apellido, setApellido] = useState('');
@@ -51,12 +15,6 @@ export default function PatientRegistration(){
     const [alergias, setAlergiasPaciente] = useState('');
     const [fecha_atencion, setFechaAtencion] = useState('');
     const [padecimiento_paciente, setPadecimiento] = useState('');
-
-    // const insertPacients = () => {
-    //     APIService.InsertData({nombre, apellido, edad, fecha, sangre, sexo, est_civil, alergias, fecha_atencion, padecimiento_paciente})
-    //     // .then((resp) => insertPacients(resp))
-    //     // .catch(err => console.log('error', err))
-    // }
 
     var allData = {
         nombre_paciente: nombre,
@@ -119,8 +77,19 @@ export default function PatientRegistration(){
                 <Form.Control type='date' placeholder='Introduzca su fecha de nacimiento' name='fecha_nacimiento' value={fecha} onChange={(e) => setFecha(e.target.value)}/>
             </FormGroup>
             <FormGroup className='mb-3'>
-                <Form.Label>Tipo de Sangre</Form.Label>
-                <Form.Control type='text' placeholder='Introduzca su tipo de sangre' name='tipo_sangre' value={sangre} onChange={(e) => setSangre(e.target.value)}/>
+                <Form.Label>Tipo de Sangre</Form.Label>{' '}
+                <Form.Select aria-label="Tipo de Sangre" onChange={(e) => setSangre(e.target.value)} value={sangre}>
+                    <option>Seleccione el tipo de sangre</option>
+                    <option value={"A Positivo"}>A+</option>
+                    <option value={"A Negativo"}>A-</option>
+                    <option value={"O Positivo"}>O+</option>
+                    <option value={"O Negativo"}>O-</option>
+                    <option value={"AB Positivo"}>AB+</option>
+                    <option value={"AB Negativo"}>AB-</option>
+                    <option value={"B Positivo"}>B+</option>
+                    <option value={"B Negativo"}>B-</option>
+                </Form.Select>
+                {/* <Form.Control type='text' placeholder='Introduzca su tipo de sangre' name='tipo_sangre' value={sangre} onChange={(e) => setSangre(e.target.value)}/> */}
             </FormGroup>
             <FormGroup className='mb-3'>
                 <Form.Label>Sexo del paciente</Form.Label>
